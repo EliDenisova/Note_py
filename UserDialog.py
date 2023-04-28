@@ -1,8 +1,9 @@
 import datetime as dt
 
 
-class UserDialog():
-    def print_menu(self):
+class UserDialog:
+    @staticmethod
+    def print_menu():
         print('\n =====',
               'Ваш как-бы-Джарвис приветствует вас.',
               'Введите один из номеров команды ниже (цифру и enter)', sep=chr(10))
@@ -13,7 +14,8 @@ class UserDialog():
               '0 - выход',
               sep='\n')
 
-    def user_choice(self):
+    @staticmethod
+    def user_choice():
         ur_cmd = input('ожидаю цифру...:')
         if not ur_cmd.isdigit():
             print('Мискузи?... Введите цифру от 0 до 4')
@@ -24,7 +26,7 @@ class UserDialog():
 
     def menu_cycle(self, notes):
         exit_flag = False
-        while exit_flag == False:
+        while not exit_flag:
             self.print_menu()
             ur_cmd = self.user_choice()
             if ur_cmd == 1:
@@ -36,20 +38,20 @@ class UserDialog():
                 # показать заметки по фильтру даты
                 try:
                     d, m, y = input(
-                        'Введите начальную дату фильтра (dd/mm/yyyy) (пустой ввод без начальной даты):').split('/')
+                        'Введите начальную дату фильтра (yyyy/mm/dd) (пустой ввод без начальной даты):').split('/')
                     min_date = dt.datetime(int(y), int(m), int(d))
                 except:
                     print('(вывод без нижней границы даты)')
                     min_date = dt.datetime.min
                 try:
                     d, m, y = input(
-                        'Введите конечную дату фильтра (dd/mm/yyyy) (пустой ввод без конечной даты):').split('/')
+                        'Введите конечную дату фильтра (yyyy/mm/dd) (пустой ввод без конечной даты):').split('/')
                     max_date = dt.datetime(int(y), int(m), int(d))
                 except:
                     print('(вывод без верхней границы даты)')
                     max_date = dt.datetime.max
                 print('В запрашиваемом диапазоне найдены заметки:')
-                if notes.print_by_dates(first=min_date, last=max_date) == False:
+                if not notes.print_by_dates(first=min_date, last=max_date):
                     print('точнее НЕ найдены')
                 input('ENTER для продолжения')
 
@@ -60,7 +62,7 @@ class UserDialog():
                     print('Заметка: ', end='')
                     if notes.print_by_id(inp_id):
                         inp = input('Введите новый текст заметки (или пустой ввод для отмены):')
-                        if notes.edit_by_index(inp_id, inp) == False:
+                        if len(inp) == 0 or notes.edit_by_index(inp_id, inp) == False:
                             print('...осталась без изменений')
                     else:
                         print('не найдена.')
